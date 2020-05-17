@@ -34,7 +34,7 @@ namespace BasicRazorApp.Pages.Shared.Restaurants
 
         public void OnGet()
         {
-            logger.LogError("Executing ListModel");
+            logger.LogError("Executing ListsModel");
             Message = config["Message"];
             Restaurants = restaurantData.GetRestaurantsByName(SearchTerm);
         }

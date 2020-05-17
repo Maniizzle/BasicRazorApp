@@ -33,7 +33,7 @@
                     <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="/About">About</a></li>
                     <li><a asp-page="/Restaurants/Lists">Restaurants</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
+                    <li><a asp-page="/Restaurants/ClientRestaurants">Client Restaurants</a></li>
                 </ul>
             </div>
         </div>
@@ -45,6 +45,8 @@
         @RenderBody()
         <hr />
         <footer>
+            <vc:restaurant-count></vc:restaurant-count>
+            @RenderSection("footer", required: false)
             <p>&copy; 2020 - BasicRazorApp</p>
         </footer>
     </div>
