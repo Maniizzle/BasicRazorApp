@@ -1,8 +1,6 @@
 ﻿using BasicRazorPage.Core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BasicRazorApp.Data
 {
@@ -52,7 +50,7 @@ namespace BasicRazorApp.Data
         public IEnumerable<Restaurant> GetRestaurantsByName(string name = null)
         {
             return from r in restaurants
-                   where string.IsNullOrEmpty(name) || r.Name.StartsWith(name)
+                   where string.IsNullOrEmpty(name) || r.Name.StartsWith(name) || r.Name.ToLower().Contains(name.ToLower())
                    orderby r.Name
                    select r;
         }

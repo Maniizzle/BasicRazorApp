@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BasicRazorApp.Data;
+using BasicRazorPage.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BasicRazorPage.Core;
-using BasicRazorApp.Data;
 
 namespace BasicRazorApp.Pages.Restaurants
 {

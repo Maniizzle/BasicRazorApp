@@ -2,9 +2,10 @@
 @model BasicRazorApp.Pages.Restaurants.EditModel
 @{
     ViewData["Title"] = "Edit";
+    var name = Model.IsCreate ? "Create" : "Editing";
 }
 
-<h2>Editing @Model.Restaurant.Name</h2>
+<h2>@name @Model.Restaurant.Name</h2>
 
 <form method="post">
 

@@ -1,9 +1,7 @@
 ﻿using BasicRazorPage.Core;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BasicRazorApp.Data
 {
@@ -50,7 +48,8 @@ namespace BasicRazorApp.Data
         public IEnumerable<Restaurant> GetRestaurantsByName(string name)
         {
             var query = from r in db.Restaurants
-                        where r.Name.StartsWith(name) || string.IsNullOrEmpty(name)
+                        where r.Name.StartsWith(name) || string.IsNullOrEmpty(name) || r.Name.ToLower().Contains(name.ToLower())
+
                         orderby r.Name
                         select r;
             return query;
