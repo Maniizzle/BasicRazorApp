@@ -1,6 +1,8 @@
 ﻿using BasicRazorApp.Data;
+using BasicRazorApp.RazorHubs;
 using BasicRazorPage.Core;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +10,21 @@ using System.Threading.Tasks;
 
 namespace BasicRazorApp.Api
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/")]
     [ApiController]
     public class RestaurantsController : ControllerBase
     {
         private readonly BasicRazorAppDataContext _context;
+        private readonly IHubContext<RazorHub> hubContext;
+        // private readonly IHubContext<RazorHub> coffeeHub;
 
-        public RestaurantsController(BasicRazorAppDataContext context)
+        private readonly IRestaurantData restaurantData;
+
+        public RestaurantsController(BasicRazorAppDataContext context, IHubContext<RazorHub> hubContext, IRestaurantData restaurantData)
         {
             _context = context;
+            this.hubContext = hubContext;
+            this.restaurantData = restaurantData;
         }
 
         // GET: api/Restaurants
@@ -24,6 +32,15 @@ namespace BasicRazorApp.Api
         public IEnumerable<Restaurant> GetRestaurants()
         {
             return _context.Restaurants;
+        }
+
+        [HttpGet("pushup")]
+        public async Task<IActionResult> ActivateNote()
+        {
+            var res = restaurantData.GetCountOfRestaurants();
+            await hubContext.Clients.All.SendAsync("RecieveRestaurant", res);
+
+            return Accepted();
         }
 
         // GET: api/Restaurants/5
@@ -91,6 +108,8 @@ namespace BasicRazorApp.Api
 
             _context.Restaurants.Add(restaurant);
             await _context.SaveChangesAsync();
+            var ans = _context.Restaurants.Count();
+            await hubContext.Clients.All.SendAsync("RecieveRestaurant", ans);
 
             return CreatedAtAction("GetRestaurant", new { id = restaurant.Id }, restaurant);
         }
@@ -112,6 +131,9 @@ namespace BasicRazorApp.Api
 
             _context.Restaurants.Remove(restaurant);
             await _context.SaveChangesAsync();
+
+            var ans = _context.Restaurants.Count();
+            await hubContext.Clients.All.SendAsync("RecieveRestaurant", ans);
 
             return Ok(restaurant);
         }

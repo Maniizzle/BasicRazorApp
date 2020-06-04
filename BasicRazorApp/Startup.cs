@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BasicRazorApp.RazorHubs;
 
 namespace BasicRazorApp
 {
@@ -27,14 +28,15 @@ namespace BasicRazorApp
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
+            //  services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
 
-            //services.AddDbContextPool<BasicRazorAppDataContext>(options =>
-            //{
-            //    options.UseSqlServer(Configuration.GetConnectionString("BasicRazorAppDb"));
-            //});
+            services.AddDbContextPool<BasicRazorAppDataContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("BasicRazorAppDb"));
+            });
 
-            //services.AddScoped<IRestaurantData, SqlRestaurantData>();
+            services.AddScoped<IRestaurantData, SqlRestaurantData>();
+            services.AddSignalR().AddMessagePackProtocol();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -57,7 +59,7 @@ namespace BasicRazorApp
             app.UseStaticFiles();
             app.UseNodeModules(env);
             app.UseCookiePolicy();
-
+            app.UseSignalR(routes => routes.MapHub<RazorHub>("/razorhub"));
             app.UseMvc();
         }
 
